@@ -12,6 +12,9 @@ DELTA_TDRAW = 0.02  # 50 fps
 
 CEILING = w_ymax - 0.5
 FLOOR = w_ymin + 0.5
+KS = 3.0
+KD = 0.1
+MASS = 0.20
 
 pos_x = 0.0
 pos_y = []
@@ -27,8 +30,10 @@ def Verlet(dt):
     #calculates velocity at time t using position at time t+dt and at time t-dt
         y_temp = pos_y[1]
         #link to slides:
-        #yy(t+dt) = 2*y(t) - y(t-dt) + y''(t)*dt*dt
-        pos_y[1] = 2.0 * pos_y[1] - prev_pos_y[1] - 9.81 * dt * dt
+        #y(t+dt) = 2*y(t) - y(t-dt) + y''(t)*dt*dt
+        v = pos_y[1] - prev_pos_y[1]
+        x = pos_y[1] - pos_y[0]
+        pos_y[1] = 2.0 * pos_y[1] - prev_pos_y[1] + (-9.81 + ((-KS * x)/MASS) + ((-KD*(v/dt))/MASS)) * dt * dt
         prev_pos_y[1] = y_temp
 
 def do_simulation (dt):
